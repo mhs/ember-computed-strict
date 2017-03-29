@@ -1,8 +1,5 @@
 import Ember from 'ember';
-// TODO:
-//   get rid of _
-//   objectAt
-//   Proxies only work in the future
+// Note: Check `Proxy` compatibility before using.
 
 // A proxy which prevents the use of .get, identifies itself as a
 // proxy, and allows the wrapped object to be unwrapped
@@ -54,7 +51,6 @@ function getArrayProxiedDependency(object, arrayName, pieceName) {
   });
 }
 
-
 function getterForDependencyName(name) {
   // Strip .[] -- it doesn't matter for getting.
   name = name.replace(/\.\[\]$/, '');
@@ -80,7 +76,7 @@ export default function computedStrict(...args) {
   var names = args.slice(0, args.length - 1);
 
   var wrapper = function() {
-    var values = _.map(names, getterForDependencyName, this);
+    var values = names.map(getterForDependencyName, this);
     var proxy = proxyIfPossible(this);
     let computedReturn = fn.apply(proxy, values);
     return unProxyIfNecessary(computedReturn);
